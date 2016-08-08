@@ -16,6 +16,16 @@ node["apache"]["sites"].each do |sitename, data|
 		mode "0755"
 		recursive true
 	end
+	template "/etc/httpd/conf.d/#{sitename}.conf" do
+		source  "vhost.erb"
+		mode "0644"
+		variables(
+			:document_root => document_root,
+			:port => data["port"],
+			:domain => data["domain"]
+		)
+		notifies :restart, "service[httpd]"
+	end
 end
 
 service "httpd" do
