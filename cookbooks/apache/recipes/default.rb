@@ -37,6 +37,19 @@ node["apache"]["sites"].each do |sitename, data|
 	end
 end
 
+execute "rm /etc/httpd/conf.d/welcome1.conf" do
+	only_if do
+		File.exist?("/etc/httpd/conf.d/welcome1.conf")
+	end
+	notifies :restart, "service[httpd]"
+end
+
+execute "rm /etc/httpd/conf.d/README1" do
+	only_if do
+		File.exist?("/etc/httpd/conf.d/README1")
+	end
+end
+
 service "httpd" do
 	action [:enable, :start]
 end
